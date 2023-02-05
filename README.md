@@ -12,8 +12,7 @@ Welcome to [0xMonsoon](https://twitter.com/0xmonsoon)'s implementation of the Et
 
 All the test cases in this repository are made by [w1nt3r.eth](https://twitter.com/w1nt3r_eth). This repository is part of the "EVM From Scratch" course (release date TBD).
 
-Implementation inspired by [smol-evm](https://github.com/karmacoma-eth/smol-evm).
-Implementation inspired by [jaglinux](https://github.com/jaglinux/evm-from-scratch) 
+Implementation inspired by [smol-evm](https://github.com/karmacoma-eth/smol-evm) and [jaglinux](https://github.com/jaglinux/evm-from-scratch).
 
 ## Commands to run
 
