@@ -12,7 +12,7 @@ from lib import UINT256MAX, STATICCALL_DISSALOWED_OPCODES
 
 
 def opcodeStop(ctx, info):
-    return OpcodeResponse(success=True, encounteredStop=True, data=None)
+    return OpcodeResponse(success=True, encounteredStop=True,returnData=None)
 
 
 def opcodePush(ctx, info, numericPartOfName):
@@ -21,12 +21,12 @@ def opcodePush(ctx, info, numericPartOfName):
         data = (data << 8) | ctx.code[ctx.pc + 1]
         ctx.pc += 1
     ctx.stack.push(data)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodePop(ctx, info):
     data = ctx.stack.pop()
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeAdd(ctx, info):
@@ -36,7 +36,7 @@ def opcodeAdd(ctx, info):
     # overflow condition
     result &= UINT256MAX
     ctx.stack.push(result)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeMul(ctx, info):
@@ -46,7 +46,7 @@ def opcodeMul(ctx, info):
     # overflow condition
     result &= UINT256MAX
     ctx.stack.push(result)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeSub(ctx, info):
@@ -55,7 +55,7 @@ def opcodeSub(ctx, info):
     result = (a - b)
     result &= UINT256MAX
     ctx.stack.push(result)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeDiv(ctx, info):
@@ -67,7 +67,7 @@ def opcodeDiv(ctx, info):
     else:
         result = int(a / b)
     ctx.stack.push(result)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeMod(ctx, info):
@@ -78,7 +78,7 @@ def opcodeMod(ctx, info):
     else:
         result = a % b
     ctx.stack.push(result)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeAddMod(ctx, info):
@@ -89,7 +89,7 @@ def opcodeAddMod(ctx, info):
     result = result % c
     result &= UINT256MAX
     ctx.stack.push(result)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeMulMod(ctx, info):
@@ -100,7 +100,7 @@ def opcodeMulMod(ctx, info):
     result = result % c
     result &= UINT256MAX
     ctx.stack.push(result)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeExp(ctx, info):
@@ -109,7 +109,7 @@ def opcodeExp(ctx, info):
     result = a ** exponent
     result &= UINT256MAX
     ctx.stack.push(result)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeSignExtend(ctx, info):
@@ -120,99 +120,99 @@ def opcodeSignExtend(ctx, info):
         mask = UINT256MAX ^ ((1 << (a + 1) * 8) - 1)
         b = b | mask
     ctx.stack.push(b)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeSDiv(ctx, info):
     a = unsigned_to_signed(ctx.stack.pop())
     b = unsigned_to_signed(ctx.stack.pop())
     ctx.stack.push(signed_to_unsigned(a // b) if b != 0 else 0)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeSMod(ctx, info):
     a = unsigned_to_signed(ctx.stack.pop())
     b = unsigned_to_signed(ctx.stack.pop())
     ctx.stack.push(signed_to_unsigned(a % b) if b != 0 else 0)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeLT(ctx, info):
     a = ctx.stack.pop()
     b = ctx.stack.pop()
     ctx.stack.push(1 if a < b else 0)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeGT(ctx, info):
     a = ctx.stack.pop()
     b = ctx.stack.pop()
     ctx.stack.push(1 if a > b else 0)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeSLT(ctx, info):
     a = unsigned_to_signed(ctx.stack.pop())
     b = unsigned_to_signed(ctx.stack.pop())
     ctx.stack.push(1 if a < b else 0)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeSGT(ctx, info):
     a = unsigned_to_signed(ctx.stack.pop())
     b = unsigned_to_signed(ctx.stack.pop())
     ctx.stack.push(1 if a > b else 0)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeEQ(ctx, info):
     ctx.stack.push(1 if ctx.stack.pop() == ctx.stack.pop() else 0)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeIsZero(ctx, info):
     ctx.stack.push(1 if ctx.stack.pop() == 0 else 0)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeAnd(ctx, info):
     ctx.stack.push((ctx.stack.pop() & ctx.stack.pop()))
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeOR(ctx, info):
     ctx.stack.push((ctx.stack.pop() | ctx.stack.pop()))
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeXOR(ctx, info):
     ctx.stack.push((ctx.stack.pop() ^ ctx.stack.pop()))
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeNot(ctx, info):
     ctx.stack.push(UINT256MAX ^ ctx.stack.pop())
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeSHL(ctx, info):
     a = ctx.stack.pop()
     b = ctx.stack.pop()
     ctx.stack.push(0 if a >= 256 else ((b << a) % 2 ** 256))
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeSHR(ctx, info):
     a = ctx.stack.pop()
     b = ctx.stack.pop()
     ctx.stack.push(b >> a)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeSAR(ctx, info):
     shift, signed_value = ctx.stack.pop(), unsigned_to_signed(ctx.stack.pop())
     ctx.stack.push(signed_to_unsigned(signed_value >> shift))
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeByte(ctx, info):
@@ -221,13 +221,13 @@ def opcodeByte(ctx, info):
         ctx.stack.push((value >> ((31 - offset) * 8)) & 0xFF)
     else:
         ctx.stack.push(0)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeDup(ctx, info, numericPartOfName):
     a = ctx.stack.access_at_index(numericPartOfName * -1)
     ctx.stack.push(a)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeSwap(ctx, info, numericPartOfName):
@@ -235,42 +235,42 @@ def opcodeSwap(ctx, info, numericPartOfName):
     b = ctx.stack.pop()
     ctx.stack.push(a)
     ctx.stack.set_at_index((numericPartOfName + 1) * -1, b)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeInvalid(ctx, info):
-    return OpcodeResponse(success=False, encounteredStop=False, data=None)
+    return OpcodeResponse(success=False, encounteredStop=False,returnData=None)
 
 
 def opcodePC(ctx, info):
     ctx.stack.push(ctx.pc)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeGas(ctx, info):
     ctx.stack.push(UINT256MAX)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeJump(ctx, info):
     a = ctx.stack.pop()
     if a in ctx.valid_jumpdests_set:
         ctx.set_pc(a)
-        return OpcodeResponse(success=True, encounteredStop=False, data=None)
+        return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
     else:
-        return OpcodeResponse(success=False, encounteredStop=False, data=None)
+        return OpcodeResponse(success=False, encounteredStop=False,returnData=None)
 
 
 def opcodeJumpIf(ctx, info):
     a = ctx.stack.pop()
     b = ctx.stack.pop()
     if b == 0:
-        return OpcodeResponse(success=True, encounteredStop=False, data=None)
+        return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
     else:
         if a in ctx.valid_jumpdests_set:
             ctx.set_pc(a)
             return OpcodeResponse(
-                success=True, encounteredStop=False, data=None)
+                success=True, encounteredStop=False,returnData=None)
         else:
             return OpcodeResponse(
                 success=False,
@@ -279,14 +279,14 @@ def opcodeJumpIf(ctx, info):
 
 
 def opcodeJumpDest(ctx, info):
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeMLoad(ctx, info):
     a = ctx.stack.pop()
     b = int(ctx.memory.load(a, 32).hex(), 16)
     ctx.stack.push(b)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeMStore(ctx, info):
@@ -300,7 +300,7 @@ def opcodeMStore(ctx, info):
     b = bytes(32 - size) + b
 
     ctx.memory.store(a, b)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeMStore8(ctx, info):
@@ -314,14 +314,14 @@ def opcodeMStore8(ctx, info):
 
     if size == 1:
         ctx.memory.store(a, b)
-        return OpcodeResponse(success=True, encounteredStop=False, data=None)
+        return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
     else:
-        return OpcodeResponse(success=False, encounteredStop=False, data=None)
+        return OpcodeResponse(success=False, encounteredStop=False,returnData=None)
 
 
 def opcodeMSize(ctx, info):
     ctx.stack.push(ctx.memory.msize())
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeSHA3(ctx, info):
@@ -329,78 +329,78 @@ def opcodeSHA3(ctx, info):
     b = ctx.stack.pop()
     c = ctx.memory.load(a, b)
     ctx.stack.push(int(sha3.keccak_256(bytes(c)).digest().hex(), 16))
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeAddress(ctx, info):
     a = int(info["tx"]["to"], 16)
     ctx.stack.push(a)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeCaller(ctx, info):
     a = int(info["tx"]["from"], 16)
     ctx.stack.push(a)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeOrigin(ctx, info):
     a = int(info["tx"]["origin"], 16)
     ctx.stack.push(a)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeGasPrice(ctx, info):
     a = int(info["tx"]["gasprice"], 16)
     ctx.stack.push(a)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeBaseFee(ctx, info):
     a = int(info["block"]["basefee"], 16)
     ctx.stack.push(a)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeCoinBase(ctx, info):
     a = int(info["block"]["coinbase"], 16)
     ctx.stack.push(a)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeTimeStamp(ctx, info):
     a = int(info["block"]["timestamp"], 16)
     ctx.stack.push(a)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeNumber(ctx, info):
     a = int(info["block"]["number"], 16)
     ctx.stack.push(a)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeDifficulty(ctx, info):
     a = int(info["block"]["difficulty"], 16)
     ctx.stack.push(a)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeGasLimit(ctx, info):
     a = int(info["block"]["gaslimit"], 16)
     ctx.stack.push(a)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeChainId(ctx, info):
     a = int(info["block"]["chainid"], 16)
     ctx.stack.push(a)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeBlockHash(ctx, info):
     ctx.stack.push(0x0)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeBalance(ctx, info):
@@ -412,26 +412,26 @@ def opcodeBalance(ctx, info):
         b = ctx.world_state.get(a).getBalance()
         ctx.stack.push(b)
 
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeCallValue(ctx, info):
     a = int(info["tx"]["value"], 16)
     ctx.stack.push(a)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeCallDataLoad(ctx, info):
     a = ctx.stack.pop()
     b = int(ctx.calldata.load(a, 32).hex(), 16)
     ctx.stack.push(b)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeCallDataSize(ctx, info):
     a = ctx.calldata.size()
     ctx.stack.push(a)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeCallDataCopy(ctx, info):
@@ -440,13 +440,13 @@ def opcodeCallDataCopy(ctx, info):
     c = ctx.stack.pop()
     calldata = ctx.calldata.load(b, c)
     ctx.memory.store(a, calldata)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeCodeSize(ctx, info):
     a = len(ctx.code)
     ctx.stack.push(a)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeCodeCopy(ctx, info):
@@ -459,7 +459,7 @@ def opcodeCodeCopy(ctx, info):
         code.extend(bytes((b + c) - size))
 
     ctx.memory.store(a, code[b:b + c])
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeExtCodeSize(ctx, info):
@@ -468,7 +468,7 @@ def opcodeExtCodeSize(ctx, info):
         ctx.stack.push(0)
     else:
         ctx.stack.push(len(ctx.world_state.get(a).code))
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeExtCodeCopy(ctx, info):
@@ -484,7 +484,7 @@ def opcodeExtCodeCopy(ctx, info):
         if c + d > size:
             code.extend(bytes((c + d) - size))
         ctx.memory.store(b, code[c:c + d])
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeExtCodeHash(ctx, info):
@@ -494,7 +494,7 @@ def opcodeExtCodeHash(ctx, info):
     else:
         code = bytearray(ctx.world_state.get(a).code)
         ctx.stack.push(int(sha3.keccak_256(bytes(code)).digest().hex(), 16))
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeSelfBalance(ctx, info):
@@ -504,21 +504,21 @@ def opcodeSelfBalance(ctx, info):
     else:
         b = ctx.world_state.get(a).getBalance()
         ctx.stack.push(b)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeSStore(ctx, info):
     a = ctx.stack.pop()
     b = ctx.stack.pop()
     ctx.storage.store(a, b)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeSLoad(ctx, info):
     a = ctx.stack.pop()
     b = ctx.storage.load(a)
     ctx.stack.push(b)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeLog(ctx, info, numericPartOfName):
@@ -532,21 +532,21 @@ def opcodeLog(ctx, info, numericPartOfName):
     for i in range(numericPartOfName):
         log["topics"].append(ctx.stack.pop())
     ctx.logs.append(log)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeReturn(ctx, info):
     a = ctx.stack.pop()
     b = ctx.stack.pop()
     c = int(ctx.memory.load(a, b).hex(), 16)
-    return OpcodeResponse(success=True, encounteredStop=False, data=c)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=c)
 
 
 def opcodeRevert(ctx, info):
     a = ctx.stack.pop()
     b = ctx.stack.pop()
     c = int(ctx.memory.load(a, b).hex(), 16)
-    return OpcodeResponse(success=False, encounteredStop=False, data=c)
+    return OpcodeResponse(success=False, encounteredStop=False,returnData=c)
 
 
 def opcodeCall(ctx, info):
@@ -554,7 +554,7 @@ def opcodeCall(ctx, info):
     address = ctx.stack.pop()
     value = ctx.stack.pop()
     if info["isStaticCall"] and value != 0:
-        return OpcodeResponse(success=False, encounteredStop=False, data=None)
+        return OpcodeResponse(success=False, encounteredStop=False,returnData=None)
     argOffset = ctx.stack.pop()
     argSize = ctx.stack.pop()
     retOffset = ctx.stack.pop()
@@ -586,13 +586,13 @@ def opcodeCall(ctx, info):
         ctx.returndata.setreturndata(returndata)
         ctx.memory.store(retOffset, returndata)
     ctx.stack.push(int(success))
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeReturnDataSize(ctx, info):
     a = ctx.returndata.size()
     ctx.stack.push(a)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeReturnDataCopy(ctx, info):
@@ -601,7 +601,7 @@ def opcodeReturnDataCopy(ctx, info):
     c = ctx.stack.pop()
     returndata = ctx.returndata.load(b, c)
     ctx.memory.store(a, returndata)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeDelegateCall(ctx, info):
@@ -631,7 +631,7 @@ def opcodeDelegateCall(ctx, info):
         ctx.returndata.setreturndata(returndata)
         ctx.memory.store(retOffset, returndata)
     ctx.stack.push(int(success))
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeStaticCall(ctx, info):
@@ -667,7 +667,7 @@ def opcodeStaticCall(ctx, info):
         ctx.returndata.setreturndata(returndata)
         ctx.memory.store(retOffset, returndata)
     ctx.stack.push(int(success))
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeCreate(ctx, info):
@@ -699,7 +699,7 @@ def opcodeCreate(ctx, info):
 
     if not success:
         ctx.stack.push(0)
-        return OpcodeResponse(success=True, encounteredStop=False, data=None)
+        return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
     if not returndata:
         returndata = bytes()
@@ -712,7 +712,7 @@ def opcodeCreate(ctx, info):
             balance=value,
             code=returndata))
     ctx.stack.push(contract_address)
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 def opcodeSelfDestruct(ctx, info):
@@ -729,7 +729,7 @@ def opcodeSelfDestruct(ctx, info):
 
     ctx.world_state.get(current_address).balance = 0
     ctx.world_state.get(current_address).code = bytes()
-    return OpcodeResponse(success=True, encounteredStop=False, data=None)
+    return OpcodeResponse(success=True, encounteredStop=False,returnData=None)
 
 
 opcode = {}
@@ -936,7 +936,7 @@ def evm(code, info, outputStackLen, isStaticCall):
 
     result = []
     logs = ctx.logs
-    returndata = opcodeReturn.data
+    returndata = opcodeReturn.returnData
 
     if not opcodeReturn.success:
         return (opcodeReturn.success, result, logs, returndata, world_state)

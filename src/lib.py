@@ -209,7 +209,7 @@ class Context:
 class OpcodeResponse:
     success: bool  # whether current execution completed successfully
     encounteredStop: bool  # stop will be True for stop opcode
-    data: int  # pop, return etc. opcodes return data
+    returnData: int  # pop, return etc. opcodes return data
 
 
 class OpcodeData:
