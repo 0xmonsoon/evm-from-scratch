@@ -570,7 +570,7 @@ def opcodeCall(ctx, info):
 
     code = ctx.world_state.get(address).code
     (success, stack, logs, returndata, after_execution_world_state) = evm(
-        code, new_info, 0, False)
+        code = code, info = new_info, outputStackLen = 0, isStaticCall = False)
 
     if success:
         ctx.world_state = after_execution_world_state
@@ -615,7 +615,7 @@ def opcodeDelegateCall(ctx, info):
 
     code = ctx.world_state.get(address).code
     (success, stack, logs, returndata, after_execution_world_state) = evm(
-        code, new_info, 0, False)
+        code = code, info = new_info, outputStackLen = 0, isStaticCall = False)
 
     if success:
         ctx.world_state = after_execution_world_state
@@ -652,7 +652,7 @@ def opcodeStaticCall(ctx, info):
 
     code = ctx.world_state.get(address).code
     (success, stack, logs, returndata, after_execution_world_state) = evm(
-        code, new_info, 0, True)
+        code = code, info = new_info, outputStackLen = 0, isStaticCall = True)
 
     if success:
         ctx.world_state = after_execution_world_state
@@ -694,8 +694,8 @@ def opcodeCreate(ctx, info):
         16)
 
     code = ctx.memory.load(offset, size)
-    (success, stack, logs, returndata,
-     after_execution_world_state) = evm(code, info, 0, False)
+    (success, stack, logs, returndata, after_execution_world_state) = evm(
+        code = code, info = info, outputStackLen = 0, isStaticCall = False)
 
     if not success:
         ctx.stack.push(0)
@@ -907,7 +907,7 @@ def evm(code, info, outputStackLen, isStaticCall):
     while ctx.pc < len(code):
         op = code[ctx.pc]
         if isStaticCall:
-            info["isStaticCall"] = False
+            info["isStaticCall"] = True
             if op in STATICCALL_DISSALOWED_OPCODES:
                 opcodeReturn.success = False
                 break
@@ -970,8 +970,7 @@ def test():
             expected_return = test['expect'].get('return', None)
 
             (success, stack, logs, returndata, after_execution_world_state) = evm(
-                code, info, len(expected_stack), False)
-
+                code = code, info = info, outputStackLen = len(expected_stack), isStaticCall = False)
             expected_stack = [int(x, 16) for x in expected_stack]
             if len(expected_logs) > 0:
                 for log in expected_logs:
